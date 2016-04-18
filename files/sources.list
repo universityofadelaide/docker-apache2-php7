@@ -1,0 +1,19 @@
+## All officially supported packages, including security- and other updates
+deb <mirror> <version> main restricted
+deb <mirror> <version>-security main restricted
+deb <mirror> <version>-updates main restricted
+
+## The source packages (only needed to recompile existing packages)
+#deb-src <mirror> <version> main restricted
+#deb-src <mirror> <version>-security main restricted
+#deb-src <mirror> <version>-updates main restricted
+
+## All community supported packages, including security- and other updates
+deb <mirror> <version> universe multiverse
+deb <mirror> <version>-security universe multiverse
+deb <mirror> <version>-updates universe multiverse
+
+## The source packages (only needed to recompile existing packages)
+#deb-src <mirror> <version> universe multiverse
+#deb-src <mirror> <version>-security universe multiverse
+#deb-src <mirror> <version>-updates universe multiverse
