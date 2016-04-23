@@ -1,4 +1,4 @@
-FROM ubuntu:15.10
+FROM ubuntu:16.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -32,15 +32,10 @@ RUN a2dismod vhost_alias
 
 # As everything up to here is exactly the same between PHP versions, its all cached
 # in the build process, and is super fast.
-RUN apt-add-repository -y ppa:ondrej/php
-RUN apt-get update
 RUN apt-get -y install php7.0 php7.0-cli php7.0-common libapache2-mod-php7.0 php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php-xdebug php7.0-xml php7.0-mbstring libedit-dev
 
 COPY ./files/apache2-foreground /usr/local/bin/apache2-foreground
 COPY ./files/apache2.conf /etc/apache2/apache2.conf
-
-# Find host ip, then setup xdebug
-RUN HOST=$(ip -4 route show default | grep -Po 'default via \K[\d.]+') && echo "; configuration for php xdebug module\n; priority=20\nzend_extension=xdebug.so\nxdebug.max_nesting_level=500\nxdebug.remote_enable=1\nxdebug.remote_port=9001\nxdebug.remote_host=${HOST}\nxdebug.remote_autostart=1\nxdebug.idekey=PHPSTORM" > /etc/php/7.0/mods-available/xdebug.ini
 
 RUN phpenmod -v ALL -s ALL xdebug
 
