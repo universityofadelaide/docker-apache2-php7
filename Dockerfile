@@ -32,7 +32,7 @@ RUN a2dismod vhost_alias
 
 # As everything up to here is exactly the same between PHP versions, its all cached
 # in the build process, and is super fast.
-RUN apt-get -y install php7.0 php7.0-cli php7.0-common libapache2-mod-php7.0 php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php-xdebug php7.0-xml php7.0-mbstring libedit-dev
+RUN apt-get -y install php7.0 php7.0-cli php7.0-common libapache2-mod-php7.0 php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php-xdebug php7.0-xml php7.0-mbstring php7.0-bcmath libedit-dev
 
 COPY ./files/apache2-foreground /usr/local/bin/apache2-foreground
 COPY ./files/apache2.conf /etc/apache2/apache2.conf
