@@ -31,7 +31,7 @@ COPY ./files/apache2.conf /etc/apache2/apache2.conf
 # PHP config.
 COPY ./files/php.ini /etc/php/7.0/mods-available/ua.ini
 
-# Configure timezone and sendmail.
+# Add smtp support
 RUN echo "sendmail_path = /usr/sbin/ssmtp -t" > /etc/php/7.0/mods-available/sendmail.ini \
 && echo "mailhub=mail:25\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf
 
