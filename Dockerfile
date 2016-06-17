@@ -20,7 +20,7 @@ RUN sed -i.bak "s/<mirror>/http:\/\/mirror.internode.on.net\/pub\/ubuntu\/ubuntu
 RUN apt-get update \
 && apt-get -y dist-upgrade \
 && apt-get -y install apache2 \
-&& apt-get -y install php7.0-common libapache2-mod-php7.0 php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php7.0-xml php7.0-mbstring php7.0-bcmath php7.0-xml libedit-dev \
+&& apt-get -y install php7.0-common libapache2-mod-php7.0 php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php7.0-mbstring php7.0-bcmath php7.0-xml libedit-dev \
 && apt-get -y install ssmtp \
 && apt-get -y autoremove && apt-get -y autoclean && apt-get clean && rm -rf /var/lib/apt /tmp/* /var/tmp/*
 
@@ -54,4 +54,3 @@ WORKDIR /web
 
 # Start the web server.
 CMD ["/usr/local/bin/apache2-foreground"]
-
