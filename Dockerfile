@@ -2,6 +2,10 @@ FROM ubuntu:16.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
+# Configured timezone.
+ENV TZ=Australia/Adelaide
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Ensure UTF-8.
 RUN locale-gen en_AU.UTF-8
 ENV LANG       en_AU.UTF-8
@@ -28,8 +32,7 @@ COPY ./files/apache2.conf /etc/apache2/apache2.conf
 COPY ./files/php.ini /etc/php/7.0/mods-available/ua.ini
 
 # Configure timezone and sendmail.
-RUN echo "Australia/Adelaide" > /etc/timezone; dpkg-reconfigure tzdata \
-&& echo "sendmail_path = /usr/sbin/ssmtp -t" > /etc/php/7.0/mods-available/sendmail.ini \
+RUN echo "sendmail_path = /usr/sbin/ssmtp -t" > /etc/php/7.0/mods-available/sendmail.ini \
 && echo "mailhub=mail:25\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf
 
 # Configure apache modules, php modules, error logging.
@@ -51,3 +54,4 @@ WORKDIR /web
 
 # Start the web server.
 CMD ["/usr/local/bin/apache2-foreground"]
+
