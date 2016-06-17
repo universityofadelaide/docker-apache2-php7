@@ -16,7 +16,7 @@ RUN sed -i.bak "s/<mirror>/http:\/\/mirror.internode.on.net\/pub\/ubuntu\/ubuntu
 RUN apt-get update \
 && apt-get -y dist-upgrade \
 && apt-get -y install apache2 \
-&& apt-get -y install php7.0 php7.0-cli php7.0-common libapache2-mod-php7.0 php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php-xdebug php7.0-xml php7.0-mbstring php7.0-bcmath libedit-dev \
+&& apt-get -y install php7.0 php7.0-cli php7.0-common libapache2-mod-php7.0 php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php7.0-xml php7.0-mbstring php7.0-bcmath libedit-dev \
 && apt-get -y install ssmtp \
 && apt-get -y autoremove && apt-get -y autoclean && apt-get clean && rm -rf /var/lib/apt /tmp/* /var/tmp/*
 
@@ -33,7 +33,7 @@ RUN echo "Australia/Adelaide" > /etc/timezone; dpkg-reconfigure tzdata \
 RUN a2enmod rewrite \
 && a2dismod vhost_alias \
 && a2dissite 000-default \
-&& phpenmod -v ALL -s ALL xdebug sendmail \
+&& phpenmod -v ALL -s ALL sendmail \
 && chmod +x /usr/local/bin/apache2-foreground
 
 # Configure error logging.
