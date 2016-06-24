@@ -12,16 +12,12 @@ ENV LANG       en_AU.UTF-8
 ENV LC_ALL     en_AU.UTF-8
 
 # Use nearby apt mirror.
-COPY ./files/sources.list /etc/apt/sources.list
-RUN sed -i.bak "s/<mirror>/http:\/\/mirror.internode.on.net\/pub\/ubuntu\/ubuntu/g" /etc/apt/sources.list \
-&& sed -i.bak "s/<version>/$(sed -n "s/^.*CODENAME=\(.*\)/\1/p" /etc/lsb-release)/g" /etc/apt/sources.list
+RUN sed -i 's%http://archive.ubuntu.com/ubuntu/%mirror://mirrors.ubuntu.com/mirrors.txt%' /etc/apt/sources.list
 
 # Upgrade all currently installed packages and install web server packages.
 RUN apt-get update \
 && apt-get -y dist-upgrade \
-&& apt-get -y install apache2 \
-&& apt-get -y install php7.0-common libapache2-mod-php7.0 php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php7.0-xml php7.0-mbstring php7.0-bcmath php7.0-xml libedit-dev \
-&& apt-get -y install ssmtp \
+&& apt-get -y install apache2 php7.0-common libapache2-mod-php7.0 php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php7.0-mbstring php7.0-bcmath php7.0-xml libedit-dev ssmtp \
 && apt-get -y autoremove && apt-get -y autoclean && apt-get clean && rm -rf /var/lib/apt /tmp/* /var/tmp/*
 
 # Apache config.
@@ -31,7 +27,7 @@ COPY ./files/apache2.conf /etc/apache2/apache2.conf
 # PHP config.
 COPY ./files/php.ini /etc/php/7.0/mods-available/ua.ini
 
-# Configure timezone and sendmail.
+# Add smtp support
 RUN echo "sendmail_path = /usr/sbin/ssmtp -t" > /etc/php/7.0/mods-available/sendmail.ini \
 && echo "mailhub=mail:25\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf
 
