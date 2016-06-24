@@ -12,9 +12,7 @@ ENV LANG       en_AU.UTF-8
 ENV LC_ALL     en_AU.UTF-8
 
 # Use nearby apt mirror.
-COPY ./files/sources.list /etc/apt/sources.list
-RUN sed -i.bak "s/<mirror>/http:\/\/mirror.internode.on.net\/pub\/ubuntu\/ubuntu/g" /etc/apt/sources.list \
-&& sed -i.bak "s/<version>/$(sed -n "s/^.*CODENAME=\(.*\)/\1/p" /etc/lsb-release)/g" /etc/apt/sources.list
+RUN sed -i 's%http://archive.ubuntu.com/ubuntu/%mirror://mirrors.ubuntu.com/mirrors.txt%' /etc/apt/sources.list
 
 # Upgrade all currently installed packages and install web server packages.
 RUN apt-get update \
