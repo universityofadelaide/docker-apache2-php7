@@ -12,7 +12,7 @@ ENV LANG       en_AU.UTF-8
 ENV LC_ALL     en_AU.UTF-8
 
 # Use nearby apt mirror.
-RUN sed -i 's%http://archive.ubuntu.com/ubuntu/%mirror://mirrors.ubuntu.com/mirrors.txt%' /etc/apt/sources.list
+#RUN sed -i 's%http://archive.ubuntu.com/ubuntu/%mirror://mirrors.ubuntu.com/mirrors.txt%' /etc/apt/sources.list
 
 # Upgrade all currently installed packages and install web server packages.
 RUN apt update \
