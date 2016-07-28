@@ -17,7 +17,7 @@ RUN sed -i 's%http://archive.ubuntu.com/ubuntu/%mirror://mirrors.ubuntu.com/mirr
 # Upgrade all currently installed packages and install web server packages.
 RUN apt update \
 && apt-get -y dist-upgrade \
-&& apt-get -y install apache2 php7.0-common libapache2-mod-php7.0 php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php7.0-mbstring php7.0-bcmath php7.0-xml libedit-dev ssmtp \
+&& apt-get -y install apache2 php7.0-common libapache2-mod-php7.0 php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php7.0-mbstring php7.0-bcmath php7.0-xml php7.0-zip libedit-dev ssmtp \
 && apt-get -y autoremove && apt-get -y autoclean && apt-get clean && rm -rf /var/lib/apt/lists /tmp/* /var/tmp/*
 
 # Apache config.
