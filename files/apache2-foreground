@@ -6,7 +6,7 @@ rm -f /var/run/apache2/apache2.pid
 
 # If there is a path alias available, use it.
 if [ -e /web/conf/path-alias.conf ]; then
-  ln -s /web/conf/path-alias.conf /etc/apache2/conf-enabled/path-aliases.conf
+  ln -sf /web/conf/path-alias.conf /etc/apache2/conf-enabled/path-aliases.conf
 fi
 
 export APACHE_LOG_DIR=/var/log/apache2
