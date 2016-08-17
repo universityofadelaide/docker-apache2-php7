@@ -39,8 +39,8 @@ RUN a2enmod rewrite \
 && chmod +x /usr/local/bin/apache2-foreground
 
 # Configure error logging.
-#RUN ln -sf /dev/stdout /var/log/apache2/access.log \
-#&& ln -sf /dev/stderr /var/log/apache2/error.log
+RUN ln -sf /dev/stdout /var/log/apache2/access.log \
+&& ln -sf /dev/stderr /var/log/apache2/error.log
 
 # Web ports.
 EXPOSE 80 443
@@ -50,4 +50,3 @@ WORKDIR /web
 
 # Start the web server.
 CMD ["/usr/local/bin/apache2-foreground"]
-
