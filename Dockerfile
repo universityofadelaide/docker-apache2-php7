@@ -23,6 +23,7 @@ RUN apt update \
 # Apache config.
 COPY ./files/apache2-foreground /usr/local/bin/apache2-foreground
 COPY ./files/apache2.conf /etc/apache2/apache2.conf
+RUN echo "umask 002" >> /etc/apache2/envvars
 
 # PHP config.
 COPY ./files/php.ini /etc/php/7.0/mods-available/ua.ini
