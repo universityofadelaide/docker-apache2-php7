@@ -42,7 +42,7 @@ RUN a2enmod rewrite \
 # Configure error logging.
 RUN ln -sf /dev/stdout /var/log/apache2/access.log \
 && ln -sf /dev/stderr /var/log/apache2/error.log \
-&& rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf
+&& truncate -s 0 /etc/apache2/conf-available/other-vhosts-access-log.conf
 
 # Web ports.
 EXPOSE 80 443
