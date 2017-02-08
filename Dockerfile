@@ -23,6 +23,8 @@ RUN apt update \
 # Apache config.
 COPY ./files/apache2-foreground /usr/local/bin/apache2-foreground
 COPY ./files/apache2.conf /etc/apache2/apache2.conf
+COPY ./files/mime_additional.conf /etc/apache2/mods-available/mime_additional.conf
+RUN touch /etc/apache2/mods-available/mime_additional.load
 RUN echo "umask 002" >> /etc/apache2/envvars
 
 # PHP config.
@@ -33,7 +35,7 @@ RUN echo "sendmail_path = /usr/sbin/ssmtp -t" > /etc/php/7.0/mods-available/send
 && echo "mailhub=mail:25\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf
 
 # Configure apache modules, php modules, error logging.
-RUN a2enmod rewrite \
+RUN a2enmod rewrite mime_additional \
 && a2dismod vhost_alias \
 && a2dissite 000-default \
 && phpenmod -v ALL -s ALL ua sendmail \
