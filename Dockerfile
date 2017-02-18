@@ -48,7 +48,7 @@ RUN ln -sf /dev/stdout /var/log/apache2/access.log \
 EXPOSE 80 443
 
 # set working directory.
-WORKDIR /web
+WORKDIR /app
 
 # Start the web server.
 CMD ["/usr/local/bin/apache2-foreground"]
