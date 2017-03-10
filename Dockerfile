@@ -11,44 +11,35 @@ RUN locale-gen en_AU.UTF-8
 ENV LANG       en_AU.UTF-8
 ENV LC_ALL     en_AU.UTF-8
 
-# Use nearby apt mirror.
-#RUN sed -i 's%http://archive.ubuntu.com/ubuntu/%mirror://mirrors.ubuntu.com/mirrors.txt%' /etc/apt/sources.list
-
 # Upgrade all currently installed packages and install web server packages.
 RUN apt update \
 && apt-get -y dist-upgrade \
-&& apt-get -y install apache2 php7.0-common libapache2-mod-php7.0 php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php7.0-mbstring php7.0-bcmath php7.0-xml php7.0-zip php7.0-soap libedit-dev ssmtp \
+&& apt-get -y install apache2 php7.0-common libapache2-mod-php7.0 php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php7.0-mbstring php7.0-bcmath php7.0-xml php7.0-zip php7.0-soap libedit-dev \
 && apt-get -y autoremove && apt-get -y autoclean && apt-get clean && rm -rf /var/lib/apt/lists /tmp/* /var/tmp/*
 
 # Apache config.
-COPY ./files/apache2-foreground /usr/local/bin/apache2-foreground
 COPY ./files/apache2.conf /etc/apache2/apache2.conf
 RUN echo "umask 002" >> /etc/apache2/envvars
 
 # PHP config.
-COPY ./files/php.ini /etc/php/7.0/mods-available/ua.ini
+COPY ./files/php_custom.ini /etc/php/7.0/mods-available/php_custom.ini
 
-# Add smtp support
-RUN echo "sendmail_path = /usr/sbin/ssmtp -t" > /etc/php/7.0/mods-available/sendmail.ini \
-&& echo "mailhub=mail:25\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf
-
-# Configure apache modules, php modules, error logging.
+# Configure apache modules, php modules, logging.
 RUN a2enmod rewrite \
 && a2dismod vhost_alias \
+&& a2disconf other-vhosts-access-log \
 && a2dissite 000-default \
-&& phpenmod -v ALL -s ALL ua sendmail \
-&& chmod +x /usr/local/bin/apache2-foreground
+&& phpenmod -v ALL -s ALL php_custom
 
-# Configure error logging.
-RUN ln -sf /dev/stdout /var/log/apache2/access.log \
-&& ln -sf /dev/stderr /var/log/apache2/error.log \
-&& rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf
+# Add in bootstrap script.
+COPY ./files/apache2-foreground /apache2-foreground
+RUN chmod +x /apache2-foreground
 
-# Web ports.
-EXPOSE 80 443
+# Web port.
+EXPOSE 80
 
 # set working directory.
 WORKDIR /code
 
 # Start the web server.
-CMD ["/usr/local/bin/apache2-foreground"]
+CMD ["/apache2-foreground"]

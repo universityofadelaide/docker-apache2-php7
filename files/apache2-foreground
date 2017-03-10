@@ -1,14 +1,20 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
-# Apache gets grumpy about PID files pre-existing
-rm -f /var/run/apache2/apache2.pid
+# Ensure /code/web directory exists, preventing Apache from crashing.
+mkdir -p /code/web
 
-# If there is a path alias available, use it.
-if [ -e /code/conf/path-alias.conf ]; then
-  ln -sf /code/conf/path-alias.conf /etc/apache2/conf-enabled/path-aliases.conf
+# Ensure $BASE_PATH starts with a slash.
+BASE_PATH=$(echo ${BASE_PATH} | sed 's#^\([^/]\)#/\1#')
+
+# If there is a BASE_PATH set, create an alias for it.
+if [[ ${BASE_PATH} ]]; then
+  mkdir -p /var/www/html${BASE_PATH}
+  ln -sf /code/web /var/www/html${BASE_PATH}
+
+  # An alternative to this mkdir/ln method is to create an alias, but it
+  # requires root permissions.
+  #echo 'Alias "${BASE_PATH}" "/code/web"' > /etc/apache2/conf-enabled/path-aliases.conf
 fi
 
-export APACHE_LOG_DIR=/var/log/apache2
-
-exec apache2 -DFOREGROUND
+exec apache2 -D FOREGROUND
