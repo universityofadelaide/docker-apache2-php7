@@ -4,17 +4,27 @@ set -e
 # Ensure /code/web directory exists, preventing Apache from crashing.
 mkdir -p /code/web
 
-# Ensure $BASE_PATH starts with a slash.
-BASE_PATH=$(echo ${BASE_PATH} | sed 's#^\([^/]\)#/\1#')
+# Ensure $WEB_PATH starts with a slash.
+WEB_PATH=$(echo ${WEB_PATH} | sed 's#^\([^/]\)#/\1#')
 
-# If there is a BASE_PATH set, create an alias for it.
-if [[ ${BASE_PATH} ]]; then
-  mkdir -p /var/www/html${BASE_PATH}
-  ln -sf /code/web /var/www/html${BASE_PATH}
+# If $WEB_PATH is set, create an alias for it.
+if [[ ${WEB_PATH} ]]; then
+  mkdir -p /var/www/html${WEB_PATH}
+  ln -sf /code/web /var/www/html${WEB_PATH}
 
   # An alternative to this mkdir/ln method is to create an alias, but it
   # requires root permissions.
-  #echo 'Alias "${BASE_PATH}" "/code/web"' > /etc/apache2/conf-enabled/path-aliases.conf
+  #echo 'Alias "${WEB_PATH}" "/code/web"' > /etc/apache2/conf-enabled/path-aliases.conf
+fi
+
+# If $PUBLIC_DIR is set, symlink it to /shared/public
+if [[ ${PUBLIC_DIR} ]]; then
+  ln -sf /shared/public /code/${PUBLIC_DIR}
+fi
+
+# If $PRIVATE_DIR is set, ensure it exists
+if [[ ${PRIVATE_DIR} ]]; then
+  mkdir -p ${PRIVATE_DIR}
 fi
 
 exec apache2 -D FOREGROUND

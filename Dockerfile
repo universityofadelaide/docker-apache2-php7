@@ -31,6 +31,9 @@ RUN a2enmod rewrite \
 && a2dissite 000-default \
 && phpenmod -v ALL -s ALL php_custom
 
+# Add /code /shared directories and ensure ownership by web user.
+RUN mkdir -p /code /shared && chown www-data:www-data /code /shared
+
 # Add in bootstrap script.
 COPY ./files/apache2-foreground /apache2-foreground
 RUN chmod +x /apache2-foreground
