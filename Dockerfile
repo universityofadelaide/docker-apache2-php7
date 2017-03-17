@@ -19,7 +19,7 @@ RUN apt update \
 
 # Apache config.
 COPY ./files/apache2.conf /etc/apache2/apache2.conf
-RUN echo "umask 002" >> /etc/apache2/envvars
+RUN chown www-data:www-data /etc/apache2/apache2.conf && echo "umask 002" >> /etc/apache2/envvars
 
 # PHP config.
 COPY ./files/php_custom.ini /etc/php/7.0/mods-available/php_custom.ini

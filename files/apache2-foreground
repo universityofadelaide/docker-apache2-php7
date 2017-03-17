@@ -4,21 +4,15 @@ set -e
 # Ensure /code/web directory exists, preventing Apache from crashing.
 mkdir -p /code/web
 
-# Ensure $WEB_PATH starts with a slash.
-WEB_PATH=$(echo ${WEB_PATH} | sed 's#^\([^/]\)#/\1#')
-
-# If $WEB_PATH is set, create an alias for it.
-if [ -n "${WEB_PATH}" ]; then
-  mkdir -p /var/www/html$(dirname ${WEB_PATH})
-  ln -sf /code/web /var/www/html${WEB_PATH}
-
-  # An alternative to this mkdir/ln method is to create an alias, but it
-  # requires root permissions.
-  #echo 'Alias "${WEB_PATH}" "/code/web"' > /etc/apache2/conf-enabled/path-aliases.conf
+# If $WEB_PATH is set, create an alias for it in apache config.
+if [ "${WEB_PATH}" ]; then
+  # Ensure $WEB_PATH starts with a slash.
+  WEB_PATH=$(echo ${WEB_PATH} | sed 's#^\([^/]\)#/\1#')
+  echo "Alias '${WEB_PATH}' '/code/web'" >> /etc/apache2/apache2.conf
 fi
 
 # If $PUBLIC_DIR is set, symlink it to /shared/public and correct permissions.
-if [ -n "${PUBLIC_DIR}" ]; then
+if [ "${PUBLIC_DIR}" ]; then
   mkdir -p /shared/public
   # Only create symlink if it does not already exist.
   if [ ! -h /code/${PUBLIC_DIR} ]; then
@@ -28,7 +22,7 @@ if [ -n "${PUBLIC_DIR}" ]; then
 fi
 
 # If $PRIVATE_DIR is set, ensure it exists and has correct permissions.
-if [ -n "${PRIVATE_DIR}" ]; then
+if [ "${PRIVATE_DIR}" ]; then
   mkdir -p ${PRIVATE_DIR}
   chown -R www-data:www-data ${PRIVATE_DIR}
 fi
