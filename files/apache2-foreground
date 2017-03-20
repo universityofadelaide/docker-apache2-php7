@@ -4,12 +4,8 @@ set -e
 # Ensure /code/web directory exists, preventing Apache from crashing.
 mkdir -p /code/web
 
-# If $WEB_PATH is set, create an alias for it in apache config.
-if [ "${WEB_PATH}" ]; then
-  # Ensure $WEB_PATH starts with a slash.
-  WEB_PATH=$(echo ${WEB_PATH} | sed 's#^\([^/]\)#/\1#')
-  echo "Alias '${WEB_PATH}' '/code/web'" >> /etc/apache2/apache2.conf
-fi
+# Ensure $WEB_PATH starts with a slash.
+WEB_PATH=$(echo ${WEB_PATH} | sed 's#^\([^/]\)#/\1#')
 
 # If $PUBLIC_DIR is set, symlink it to /shared/public and correct permissions.
 if [ "${PUBLIC_DIR}" ]; then

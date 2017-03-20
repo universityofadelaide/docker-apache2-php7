@@ -19,7 +19,6 @@ RUN apt update \
 
 # Apache config.
 COPY ./files/apache2.conf /etc/apache2/apache2.conf
-RUN chown www-data:www-data /etc/apache2/apache2.conf && echo "umask 002" >> /etc/apache2/envvars
 
 # PHP config.
 COPY ./files/php_custom.ini /etc/php/7.0/mods-available/php_custom.ini
@@ -41,7 +40,7 @@ RUN chmod +x /apache2-foreground
 # Web port.
 EXPOSE 80
 
-# set working directory.
+# Set working directory.
 WORKDIR /code
 
 # Start the web server.
