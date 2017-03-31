@@ -15,9 +15,12 @@ ENV LC_ALL     en_AU.UTF-8
 #RUN sed -i 's%http://archive.ubuntu.com/ubuntu/%mirror://mirrors.ubuntu.com/mirrors.txt%' /etc/apt/sources.list
 
 # Upgrade all currently installed packages and install web server packages.
-RUN apt update \
+RUN apt-get update \
+&& apt-get -y install software-properties-common python-software-properties \
+&& add-apt-repository -y ppa:ondrej/php && apt-get update \
 && apt-get -y dist-upgrade \
-&& apt-get -y install apache2 php7.0-common libapache2-mod-php7.0 php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php7.0-mbstring php7.0-bcmath php7.0-xml php7.0-zip php7.0-soap libedit-dev ssmtp \
+&& apt-get -y install apache2 php-common libapache2-mod-php php-apcu php-curl php-gd php-ldap php-memcached php-mysql php7.1-opcache php-mbstring php-bcmath php-xml php-zip php-soap libedit-dev ssmtp \
+&& apt-get -y remove --purge software-properties-common python-software-properties \
 && apt-get -y autoremove && apt-get -y autoclean && apt-get clean && rm -rf /var/lib/apt/lists /tmp/* /var/tmp/*
 
 # Apache config.
@@ -28,10 +31,10 @@ RUN touch /etc/apache2/mods-available/mime_additional.load
 RUN echo "umask 002" >> /etc/apache2/envvars
 
 # PHP config.
-COPY ./files/php.ini /etc/php/7.0/mods-available/ua.ini
+COPY ./files/php.ini /etc/php/7.1/mods-available/ua.ini
 
 # Add smtp support
-RUN echo "sendmail_path = /usr/sbin/ssmtp -t" > /etc/php/7.0/mods-available/sendmail.ini \
+RUN echo "sendmail_path = /usr/sbin/ssmtp -t" > /etc/php/7.1/mods-available/sendmail.ini \
 && echo "mailhub=mail:25\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf
 
 # Configure apache modules, php modules, error logging.
