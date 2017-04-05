@@ -16,5 +16,5 @@ docker run --detach --publish 80:80 --volumes ${PWD}:/code uofa/apache2-php7
 * This image expects your code to be volumed or copied into the `/code`
 directory.
 * Apache serves `/code/web` as the webroot.
-* The `$BASE_PATH` environment variable can be used to set the sub-path your
+* The `$WEB_PATH` environment variable can be used to set the sub-path your
 web root is served from. This should start with a slash - e.g. `/test/path`.
