@@ -18,3 +18,9 @@ directory.
 * Apache serves `/code/web` as the webroot.
 * The `$WEB_PATH` environment variable can be used to set the sub-path your
 web root is served from. This should start with a slash - e.g. `/test/path`.
+
+## To build manually.
+
+```bash
+docker build -t uofa/apache2-php7 .
+```
