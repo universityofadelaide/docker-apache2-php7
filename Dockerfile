@@ -7,12 +7,13 @@ ENV TZ=Australia/Adelaide
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Ensure UTF-8.
-RUN locale-gen en_AU.UTF-8
 ENV LANG       en_AU.UTF-8
 ENV LC_ALL     en_AU.UTF-8
 
 # Upgrade all currently installed packages and install web server packages.
-RUN apt update \
+RUN apt-get update \
+&& apt-get -y install locales \
+&& locale-gen en_AU.UTF-8 \
 && apt-get -y dist-upgrade \
 && apt-get -y install apache2 php7.0-common libapache2-mod-php7.0 mysql-client php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php7.0-mbstring php7.0-bcmath php7.0-xml php7.0-zip php7.0-soap libedit-dev \
 && apt-get -y autoremove && apt-get -y autoclean && apt-get clean && rm -rf /var/lib/apt/lists /tmp/* /var/tmp/*
