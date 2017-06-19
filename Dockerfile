@@ -15,7 +15,7 @@ RUN apt-get update \
 && apt-get -y install locales \
 && locale-gen en_AU.UTF-8 \
 && apt-get -y dist-upgrade \
-&& apt-get -y install apache2 php7.0-common libapache2-mod-php7.0 mysql-client php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php7.0-mbstring php7.0-bcmath php7.0-xml php7.0-zip php7.0-soap libedit-dev \
+&& apt-get -y install apache2 php7.0-common libapache2-mod-php7.0 mysql-client php-apcu php7.0-curl php7.0-gd php7.0-ldap php7.0-mysql php7.0-opcache php7.0-mbstring php7.0-bcmath php7.0-xml php7.0-zip php7.0-soap libedit-dev php-redis \
 && apt-get -y autoremove && apt-get -y autoclean && apt-get clean && rm -rf /var/lib/apt/lists /tmp/* /var/tmp/*
 
 # Apache config.
@@ -33,6 +33,10 @@ RUN a2enmod rewrite \
 
 # Add /code /shared directories and ensure ownership by web user.
 RUN mkdir -p /code /shared && chown www-data:www-data /code /shared
+
+# Configure default bash setup.
+COPY ./files/bashrc /etc/skel/.bashrc
+COPY ./files/bashrc /root/.bashrc
 
 # Add in bootstrap script.
 COPY ./files/apache2-foreground /apache2-foreground
