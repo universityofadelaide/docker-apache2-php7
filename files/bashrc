@@ -117,6 +117,6 @@ if ! shopt -oq posix; then
 fi
 
 # Add a whale to the PS1 to avoid shell confusion.
-WHALE='\['"`tput sc`"'\]     \['"`tput rc`"'🐳\]'
+WHALE='\['"`tput sc`"'\]  \['"`tput rc`"'🐳\]'
 PS1="${WHALE} ${PS1}"
 PATH="${PATH}:/code/bin"
