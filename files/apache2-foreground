@@ -20,8 +20,8 @@ if [ -n "${PUBLIC_DIR:+1}" ]; then
   mkdir -p ${PUBLIC_DIR}
   chown -R www-data:www-data /shared/public
   # Only create symlink if it does not already exist.
-  if [ ! -h /code/web/default/files ]; then
-    ln -sf ${PUBLIC_DIR} /code/web/default/files
+  if [ ! -h /code/web/sites/default/files ]; then
+    ln -sf ${PUBLIC_DIR} /code/web/sites/default/files
   fi
 fi
 
