@@ -4,28 +4,37 @@ set -e
 # Ensure /code/web directory exists, preventing Apache from crashing.
 mkdir -p /code/web
 
-# If it's set, ensure $WEB_PATH starts with a slash.
-WEB_PATH=$(echo ${WEB_PATH} | sed 's#^\([^/]\)#/\1#')
+# Is the $WEB_PATH set?
+if [ -n "${WEB_PATH:+1}" ]; then
+  # If it's set, ensure $WEB_PATH starts with a slash.
+  WEB_PATH=$(echo ${WEB_PATH} | sed 's#^\([^/]\)#/\1#')
 
-# Unset $WEB_PATH if it's just a slash. Otherwise Apache does weird things.
-if [ "$WEB_PATH" -eq "/" ]; then
-  unset WEB_PATH
+  # Unset $WEB_PATH if it's just a slash. Otherwise Apache does weird things.
+  if [ "$WEB_PATH" == "/" ]; then
+    unset WEB_PATH
+  fi
 fi
 
 # If $PUBLIC_DIR is set, symlink it to /shared/public and correct permissions.
-if [ "${PUBLIC_DIR}" ]; then
-  mkdir -p /shared/public
-  # Only create symlink if it does not already exist.
-  if [ ! -h /code/${PUBLIC_DIR} ]; then
-    ln -sf /shared/public /code/${PUBLIC_DIR}
-  fi
+if [ -n "${PUBLIC_DIR:+1}" ]; then
+  mkdir -p ${PUBLIC_DIR}
   chown -R www-data:www-data /shared/public
+  # Only create symlink if it does not already exist.
+  if [ ! -h /code/web/default/files ]; then
+    ln -sf ${PUBLIC_DIR} /code/web/default/files
+  fi
 fi
 
 # If $PRIVATE_DIR is set, ensure it exists and has correct permissions.
-if [ "${PRIVATE_DIR}" ]; then
+if [ -n "${PRIVATE_DIR:+1}" ]; then
   mkdir -p ${PRIVATE_DIR}
   chown -R www-data:www-data ${PRIVATE_DIR}
+fi
+
+# If $TMP_DIR is set, ensure it exists and has correct permissions.
+if [ -n "${TMP_DIR:+1}" ]; then
+  mkdir -p ${TMP_DIR}
+  chown -R www-data:www-data ${TMP_DIR}
 fi
 
 exec apache2 -D FOREGROUND
