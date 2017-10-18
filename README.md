@@ -24,3 +24,13 @@ web root is served from. This should start with a slash - e.g. `/test/path`.
 ```bash
 docker build -t uofa/apache2-php7 .
 ```
+
+or use the script:
+```bash
+./build.sh
+```
+
+## Using with openshift locally
+
+For building with openshift, you probably want information from the
+documentation https://github.com/openshift/origin/blob/master/docs/cluster_up_down.md#accessing-the-openshift-registry-directly
