@@ -40,7 +40,6 @@ RUN apt-get update \
   php-xml \
   php-zip \
   ssmtp \
-  unzip \
 && apt-get -y autoremove && apt-get -y autoclean && apt-get clean && rm -rf /var/lib/apt/lists /tmp/* /var/tmp/*
 
 # Apache config.
