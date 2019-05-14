@@ -19,9 +19,11 @@ fi
 if [ -n "${PUBLIC_DIR:+1}" ]; then
   mkdir -p ${PUBLIC_DIR}
   chown -R www-data:www-data /shared/public
-  # Only create symlink if it does not already exist.
-  if [ ! -h /code/web/sites/default/files ]; then
+  # Only create symlink if it doesn't already exist (and sites/default exists).
+  if [ -d /code/web/sites/default ] && [ ! -h /code/web/sites/default/files ]; then
+    chmod 0775 /code/web/sites/default/
     ln -sf ${PUBLIC_DIR} /code/web/sites/default/files
+    chmod 0555 /code/web/sites/default/
   fi
 fi
 
