@@ -11,10 +11,6 @@ ENV LANG       en_AU.UTF-8
 ENV LANGUAGE   en_AU:en
 ENV LC_ALL     en_AU.UTF-8
 
-# Add php7.2 repo to apt. Remove once we update to the next Ubuntu LTS.
-RUN echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" > /etc/apt/sources.list.d/php.list \
-&& apt-key adv --keyserver keyserver.ubuntu.com --recv E5267A6C
-
 # Upgrade all currently installed packages and install web server packages.
 RUN apt-get update \
 && apt-get -y install locales \
@@ -22,17 +18,22 @@ RUN apt-get update \
 && locale-gen en_AU.UTF-8 \
 && apt-get -y dist-upgrade \
 && apt-get -y install \
+  gnupg2 \
+  iputils-ping \
+  telnet \
+  bind9-host \
   apache2 \
-  libapache2-mod-php \
+  libapache2-mod-php7.2 \
   libedit-dev \
   mysql-client \
-  php-common
   php-apcu \
   php-bcmath \
+  php-common \
   php-curl \
   php-gd \
   php-ldap \
   php-mbstring \
+  php-memcached \
   php-mysql \
   php-opcache \
   php-redis \
